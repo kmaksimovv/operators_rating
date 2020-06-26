@@ -1,12 +1,5 @@
-import os
-
-from app import app
-from app import views
-from flask_script import Manager
-
-manager = Manager(app)
-
+from app import app_run
 
 if __name__ == '__main__':
-    manager.run()
+    app_run()
 
