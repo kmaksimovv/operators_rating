@@ -1,9 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<p>
-    Name
-</p>
-  
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th scope="col">id</th>
+				<th scope="col">operator</th>
+				<th scope="col">queue</th>
+				<th scope="col">callerid</th>
+				<th scope="col">value</th>
+				<th scope="col">created_at</th>
+		</tr>
+		</thead>
+		<tbody>
+				{% for r in ratings %}
+				<tr>
+					<td>{{ r.id }}</td>
+					<td>{{ r.operator }}</td>
+					<td>{{ r.queue }}</td>
+					<td>{{ r.callerid  }}</td>
+					<td>{{ r.value }}</td>
+					<td>{{ r.created_at }}</td>
+				</tr>
+				{% endfor %}
+		</tbody>
+	</table>
 {% endblock content %}

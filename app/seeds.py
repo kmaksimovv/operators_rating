@@ -1,15 +1,25 @@
 from flask_script import Command
 from .models import Rating
 from app import db
+from random import randint
+from time import sleep
 
 class Faker(Command):
-    def run(self):
-        print("Fake data entered!!!")
-        r1 = Rating(operator='101', queue='400', callerid='7845995050', opinion='4')
-        db.session.add(r1)
-        db.session.commit()
+    
+    def create_ratings(self):
+        for r in range(15):
+            rating = Rating(operator='10{}'.format(randint(1,5)), queue='400', callerid=''.join(["{}".format(randint(0, 9)) for num in range(0, 11)]), value=randint(1,5))
+            print(rating)
+            db.session.add(rating)
+            db.session.commit()
+            sleep(randint(1,3))
 
+    def run(self):
+        self.create_ratings()
+        print("create faker data rarings")
+        
     # operator = db.Column(db.String(20), index=True)
     # queue = db.Column(db.String(20), index=True)
     # callerid = db.Column(db.String(20), index=True)
-    # opinion = db.Column(db.String(1))
+    # value = db.Column(db.Integer, default=0)
+    # created_at = db.Column(db.DateTime(), default=datetime.utcnow)    

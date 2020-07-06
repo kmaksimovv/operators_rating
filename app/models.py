@@ -7,9 +7,8 @@ class Rating(db.Model):
     operator = db.Column(db.String(20), index=True)
     queue = db.Column(db.String(20), index=True)
     callerid = db.Column(db.String(20), index=True)
-    # opinion = db.Column(db.String(1))
     value = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime(), default=datetime.utcnow)
     
     def __repr__(self):
-        return '<Rating operator:{} and opinion: {}>'.format(self.operator, self.opinion)    
+        return '<Rating operator:{} and value: {}>'.format(self.operator, self.value)    
