@@ -19,6 +19,9 @@ class DevelopementConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEVELOPMENT_DATABASE_URI') or \
         'mysql+pymysql://flask:flask@localhost/operators_rating'
 
+    # SQLALCHEMY_DATABASE_URI = os.environ.get('DEVELOPMENT_DATABASE_URI') or \
+    #     'mysql+pymysql://devel:devel@172.16.29.5/asteriskcdrdb'
+
 
 class TestingConfig(BaseConfig):
     DEBUG = True
