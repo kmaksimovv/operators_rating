@@ -5,10 +5,13 @@ from flask import Flask, Blueprint
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from flask_sqlalchemy import SQLAlchemy
+import flask_excel as excel
+
 
 
 app=Flask(__name__)
 app.config.from_object(os.environ.get('FLASK_ENV') or 'config.DevelopementConfig')
+
 
 ck = Blueprint('ck_page', __name__, static_folder=chartkick.js(), static_url_path='/static')
 app.register_blueprint(ck, url_prefix='/ck')
@@ -18,6 +21,8 @@ manager = Manager(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app,  db)
 manager.add_command('db', MigrateCommand)
+
+excel.init_excel(app)
 
 from app import views
 from app import models

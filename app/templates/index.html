@@ -1,6 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<form action="" method="post">
+    {{ form.csrf_token() }}
+    {% for field in form if field.name != "csrf_token" %}
+	{{ field.label() }}
+	{{ field }}
+	{% endfor %}
+	<button type="submit">поиск</button>
+</form>
+
+
 	<table class="table table-striped">
 		<thead>
 			<tr>
