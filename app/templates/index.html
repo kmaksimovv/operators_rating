@@ -7,6 +7,7 @@
     {% for field in form if field.name != "csrf_token" %}
 	{{ field.label() }}
 	{{ field }}
+	<br>
 	{% endfor %}
 	<button type="submit">поиск</button>
 </form>

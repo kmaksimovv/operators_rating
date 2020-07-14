@@ -12,14 +12,43 @@ from flask import request, redirect
 def search_results(search):
     ratings = []
     form = SearchForm(request.form)
-
-    if list(search.data.keys())[0] == 'operato':
-        search_string = search.data['operator']
+    print(search.data)
+    
+    if search.data['operator'] and search.data['callerid'] and search.data['start_date'] and search.data['end_date']:
+        search_string_operator = search.data['operator'].strip()
+        search_string_callerid = search.data['callerid'].strip()
+        search_start_date = search.data['start_date']
+        search_end_date = search.data['end_date']
+        qry = db.session.query(Rating).filter(Rating.operator == search_string_operator, Rating.callerid == search_string_callerid).filter(Rating.created_at.between(search_start_date, search_end_date))
+        ratings = qry.all()
+        return render_template('index.html', ratings=ratings, form=form)
+    elif search.data['operator'] and search.data['start_date'] and search.data['end_date']:
+        search_string_operator = search.data['operator'].strip()
+        search_start_date = search.data['start_date']
+        search_end_date = search.data['end_date']
+        qry = db.session.query(Rating).filter(Rating.operator == search_string_operator, Rating.created_at.between(search_start_date, search_end_date))
+        ratings = qry.all()
+        return render_template('index.html', ratings=ratings, form=form)
+    elif search.data['callerid'] and search.data['start_date'] and search.data['end_date']:
+        search_string = search.data['callerid'].strip()
+        search_start_date = search.data['start_date']
+        search_end_date = search.data['end_date']
+        qry = db.session.query(Rating).filter(Rating.callerid == search_string_callerid, Rating.created_at.between(search_start_date, search_end_date))
+        ratings = qry.all()
+        return render_template('index.html', ratings=ratings, form=form)        
+    elif search.data['operator'] and search.data['callerid']:
+        search_string_operator = search.data['operator'].strip()
+        search_string_callerid = search.data['callerid'].strip()
+        qry = db.session.query(Rating).filter(Rating.operator == search_string_operator, Rating.callerid == search_string_callerid)
+        ratings = qry.all()
+        return render_template('index.html', ratings=ratings, form=form)    
+    elif search.data['operator']:
+        search_string = search.data['operator'].strip()
         qry = db.session.query(Rating).filter(Rating.operator == search_string)
         ratings = qry.all()
         return render_template('index.html', ratings=ratings, form=form)
-    elif list(search.data.keys())[1] == 'callerid':
-        search_string = search.data['callerid']
+    elif search.data['callerid']:
+        search_string = search.data['callerid'].strip()
         qry = db.session.query(Rating).filter(Rating.callerid == search_string)
         ratings = qry.all()
         return render_template('index.html', ratings=ratings, form=form)
@@ -70,5 +99,10 @@ def graph_yesterday():
 
 @app.route("/export", methods=['GET'])
 def doexport():
-    excel.init_excel(app)
-    return excel.make_response_from_a_table(db.session, Rating, "xls", file_name='data') 
+    return excel.make_response_from_a_table(db.session, Rating, "xlsx", file_name="sheet")
+
+@app.route("/custom_export", methods=['GET'])
+def docustomexport():
+    query_sets = db.session.query(Rating).all()
+    column_names = ['id', 'operator', 'queue', 'callerid', 'value', 'created_at']
+    return excel.make_response_from_query_sets(query_sets, column_names,"xlsx", file_name="sheet")    

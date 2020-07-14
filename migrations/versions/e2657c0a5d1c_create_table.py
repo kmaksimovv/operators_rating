@@ -1,8 +1,8 @@
 """create table
 
-Revision ID: 37c368b1ca41
+Revision ID: e2657c0a5d1c
 Revises: 
-Create Date: 2020-07-08 16:46:20.674788
+Create Date: 2020-07-14 12:06:13.383223
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '37c368b1ca41'
+revision = 'e2657c0a5d1c'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,7 +24,7 @@ def upgrade():
     sa.Column('queue', sa.String(length=20), nullable=True),
     sa.Column('callerid', sa.String(length=20), nullable=True),
     sa.Column('value', sa.Integer(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.Column('created_at', sa.DateTime(timezone=True), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_ratings_callerid'), 'ratings', ['callerid'], unique=False)
