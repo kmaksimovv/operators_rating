@@ -14,5 +14,6 @@ class Rating(db.Model):
         return '<Rating operator:{} and value: {}>'.format(self.operator, self.value)
     
     def format_created_at(self):
-        return self.created_at.strftime("%Y-%m-%d %H:%M:%S") + f" Оператор: {self.operator}"
+        # return self.created_at.strftime("%Y-%m-%d %H:%M:%S" + " "+ f"{self.operator}")
+        return self.created_at.strftime(f"{self.operator} %m-%d %H:%M")
     

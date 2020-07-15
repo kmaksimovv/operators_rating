@@ -68,18 +68,21 @@ def index():
 
 @app.route('/graph')
 def graph_all():
-    data = []
-    ratings = db.session.query(Rating).order_by(db.asc(Rating.created_at)).all()
+    ratings = db.session.query(Rating).order_by(db.asc(Rating.created_at)).limit(10).all()
+    labels = []
+    values = []
     
     for r in ratings:
-        data.append([r.format_created_at(), r.value])
-    
-    return render_template('graph.html', data=data)
+        labels.append(r.format_created_at())
+        values.append(r.value)
+    bar_labels=labels
+    bar_values=values
+    return render_template('graph.html', labels=bar_labels, values=bar_values)
 
 @app.route('/graph-today')
 def graph_today():
     data = []
-    ratings = db.session.query(Rating).filter(func.date(Rating.created_at) == date.today()).all()
+    ratings = db.session.query(Rating).filter(func.date(Rating.created_at) == date.today()).limit(10).all()
     
     for r in ratings:
         data.append([r.format_created_at(), r.value])
@@ -89,7 +92,7 @@ def graph_today():
 @app.route('/graph-yesterday')
 def graph_yesterday():
     data = []
-    ratings = db.session.query(Rating).filter(func.date(Rating.created_at) == date.today()).all()
+    ratings = db.session.query(Rating).filter(func.date(Rating.created_at) == date.today()).limit(10).all()
     
     for r in ratings:
         data.append([r.format_created_at(), r.value])
@@ -106,3 +109,18 @@ def docustomexport():
     query_sets = db.session.query(Rating).all()
     column_names = ['id', 'operator', 'queue', 'callerid', 'value', 'created_at']
     return excel.make_response_from_query_sets(query_sets, column_names,"xlsx", file_name="sheet")    
+
+@app.route("/rating-by-operator", methods=['GET'])
+def rating_by_operator():
+    ratings = db.session.query(Rating).order_by(db.asc(Rating.created_at)).limit(10).all()
+    
+    labels = []
+    values = []
+    
+    for r in ratings:
+        labels.append(r.format_created_at())
+        values.append(r.value)
+    bar_labels=labels
+    bar_values=values
+    return render_template('rating_by_operator.html', labels=bar_labels, values=bar_values)
+
