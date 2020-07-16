@@ -2,11 +2,12 @@
 
 {% block content %}
 
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script> -->
-
-  <canvas id="сhart" width="600" height="200"></canvas>
-  <button id="save-image-btn" class="btn btn-success">Сохранить</button>
+{% for ro in ratings %}
+  <div class="text-center">ОПЕРАТОР: {{ ro.operator }}</div>
+  <canvas id="сhart-{{ro.id }}" width="900" height="200"></canvas>
+  <button id="save-image-btn-{{ro.id }}" class="btn btn-success">Сохранить</button>
   <script>
+    console.log('{{ ro.labels }}')
     Chart.plugins.register({
       beforeDraw: function(chartInstance) {
         var ctx = chartInstance.chart.ctx;
@@ -15,25 +16,17 @@
       }
     });
     
-    var ctx = document.getElementById('сhart').getContext("2d");
+    var ctx = document.getElementById("сhart-{{ ro.id }}").getContext("2d");
     var myChart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels:[
-        {% for item in labels %}
-        "{{ item }}",
-        {% endfor %}
-        ],
+        labels: {{ ro.labels|tojson|safe }},
         datasets: [{
-          data : [
-          {% for item in values %}
-          "{{ item }}",
-          {% endfor %}
-          ],
+          data : {{ ro.values }},
           backgroundColor: 'rgba(33, 145, 81, 0.2)',
           borderColor: 'rgba(255, 134, 25, 1)',
           borderWidth: 2,
-          label: 'Значение',
+          label: 'ОЦЕНКА',
           maxBarThickness: 30,
         }]
       },
@@ -73,13 +66,15 @@
         },
       }
     });
-    $('#save-image-btn').click(function() {
-      var canvas = document.getElementById('сhart');
+    $('#save-image-btn-{{ro.id }}').click(function() {
+      var canvas = document.getElementById("сhart-{{ ro.id }}");
       console.log(canvas)
-    canvas.toBlob(function(blob) {
-      saveAs(blob, "image.png");
+      canvas.toBlob(function(blob) {
+        saveAs(blob, "image.png");
+      });
     });
-  });
-  
-</script>
+    
+  </script>
+{% endfor %}
+
 {% endblock content %}

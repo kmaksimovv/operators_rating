@@ -110,17 +110,19 @@ def docustomexport():
     column_names = ['id', 'operator', 'queue', 'callerid', 'value', 'created_at']
     return excel.make_response_from_query_sets(query_sets, column_names,"xlsx", file_name="sheet")    
 
+
 @app.route("/rating-by-operator", methods=['GET'])
 def rating_by_operator():
-    ratings = db.session.query(Rating).order_by(db.asc(Rating.created_at)).limit(10).all()
+    operators = [r[0] for r in db.session.query(Rating.operator).distinct().all()]
+    rating_by_operators = []
     
-    labels = []
-    values = []
+    for index, operator in enumerate(operators):
+        rat = Rating()
+        rat.id = index
+        rat.operator = operator 
+        rat.labels = [r[0].strftime("%m-%d %H:%M") for r in db.session.query(Rating).filter_by(operator=operator).values('created_at')]
+        rat.values = [r[0] for r in db.session.query(Rating).filter_by(operator=operator).values('value')]
+        rating_by_operators.append(rat)
     
-    for r in ratings:
-        labels.append(r.format_created_at())
-        values.append(r.value)
-    bar_labels=labels
-    bar_values=values
-    return render_template('rating_by_operator.html', labels=bar_labels, values=bar_values)
+    return render_template('rating_by_operator.html', ratings=rating_by_operators)
 

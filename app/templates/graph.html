@@ -14,7 +14,6 @@
         ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
       }
     });
-    
     var ctx = document.getElementById('сhart').getContext("2d");
     var myChart = new Chart(ctx, {
       type: 'bar',
@@ -33,7 +32,7 @@
           backgroundColor: 'rgba(33, 145, 81, 0.2)',
           borderColor: 'rgba(255, 134, 25, 1)',
           borderWidth: 2,
-          label: 'Значение',
+          label: 'ОЦЕНКА',
           maxBarThickness: 30,
         }]
       },
@@ -74,7 +73,7 @@
       }
     });
     $('#save-image-btn').click(function() {
-      var canvas = document.getElementById('сhart');
+      var canvas = document.getElementById("сhart");
       console.log(canvas)
     canvas.toBlob(function(blob) {
       saveAs(blob, "image.png");
