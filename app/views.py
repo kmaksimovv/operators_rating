@@ -68,16 +68,14 @@ def index():
 
 @app.route('/graph')
 def graph_all():
-    ratings = db.session.query(Rating).order_by(db.asc(Rating.created_at)).limit(10).all()
+    ratings = db.session.query(Rating).order_by(db.asc(Rating.created_at)).limit(15).all()
     labels = []
     values = []
     
     for r in ratings:
         labels.append(r.format_created_at())
         values.append(r.value)
-    bar_labels=labels
-    bar_values=values
-    return render_template('graph.html', labels=bar_labels, values=bar_values)
+    return render_template('graph.html', labels=labels, values=values)
 
 @app.route('/graph-today')
 def graph_today():
