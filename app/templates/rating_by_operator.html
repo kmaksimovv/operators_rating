@@ -6,7 +6,6 @@
 
   {% for ro in ratings %}
     <div class="col-6">
-      <div class="text-center">ОПЕРАТОР: {{ ro.operator }}</div>
       <canvas id="сhart-{{ro.id }}" width="400" height="200"></canvas>
       <div class="text-center mt-2">
         <a class="btn btn-default" id="save-image-btn-{{ro.id }}" href="#"><i class="fa fa-download" title="Align Right"> скачать</i></a>
@@ -29,8 +28,7 @@
           labels: {{ ro.labels|tojson|safe }},
           datasets: [{
             data : {{ ro.values }},
-            backgroundColor: 'rgba(33, 145, 81, 0.2)',
-            borderColor: 'rgba(255, 134, 25, 1)',
+            backgroundColor: 'rgba(0,153,0,1)',
             borderWidth: 2,
             label: 'ОЦЕНКА',
             maxBarThickness: 30,
@@ -59,6 +57,10 @@
             }
           },
           animationEnabled: true,
+          title: {
+            display: true,
+            text: 'ОПЕРАТОР: {{ ro.operator }}'
+          },
           legend: {
             display: true
           },
