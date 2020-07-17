@@ -2,16 +2,7 @@
 
 {% block content %}
 
-<form action="" method="post">
-    {{ form.csrf_token() }}
-    {% for field in form if field.name != "csrf_token" %}
-	{{ field.label() }}
-	{{ field }}
-	<br>
-	{% endfor %}
-	<button type="submit">поиск</button>
-</form>
-
+{% include 'form.html' %}
 
 	<table class="table table-striped">
 		<thead>
