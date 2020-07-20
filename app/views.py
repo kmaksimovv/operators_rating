@@ -7,7 +7,8 @@ from .forms import *
 from sqlalchemy import func
 from datetime import date, datetime
 from flask import request, redirect
-
+from flask import send_file
+from openpyexcel import Workbook
 
 @app.route('/results')
 def search_results(search):
@@ -152,4 +153,3 @@ def rating_by_operator():
         rating_by_operators.append(rat)
     
     return render_template('rating_by_operator.html', ratings=rating_by_operators)
-
