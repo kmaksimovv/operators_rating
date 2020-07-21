@@ -8,7 +8,6 @@ from sqlalchemy import func
 from datetime import date, datetime
 from flask import request, redirect
 from flask import send_file
-from openpyexcel import Workbook
 
 @app.route('/results')
 def search_results(search):
@@ -153,3 +152,37 @@ def rating_by_operator():
         rating_by_operators.append(rat)
     
     return render_template('rating_by_operator.html', ratings=rating_by_operators)
+
+@app.route('/get_xslx_for_data')
+def get_xslx_for_data():
+    import xlsxwriter
+    from xlsxwriter.workbook import Workbook
+    from io import BytesIO
+    name_file = f"report_{datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}.xlsx"
+    workbook = xlsxwriter.Workbook(name_file)
+    worksheet = workbook.add_worksheet()
+    ratings = db.session.query(Rating).all()
+    worksheet.write(0,0, "ид")
+    worksheet.write(0,1, "оператор")
+    worksheet.write(0,2, "очередь")
+    worksheet.write(0,3, "аон")
+    worksheet.write(0,4, "оценка")
+    worksheet.write(0,5, "дата")
+    
+    row = 1
+    col = 0
+    for rating in ratings:
+        worksheet.write(row, col, rating.id)
+        worksheet.write(row, col + 1, rating.operator)
+        worksheet.write(row, col + 2, rating.queue)
+        worksheet.write(row, col + 3, rating.callerid)
+        worksheet.write(row, col + 4, rating.value)
+        worksheet.write(row, col + 5, rating.created_at.strftime("%Y-%m-%d %H:%M:%S"))
+        row += 1
+        
+    
+    workbook.close()   
+    
+    return send_file('../' + name_file, as_attachment=True, cache_timeout=0)
+
+
