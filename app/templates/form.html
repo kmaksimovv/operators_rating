@@ -1,9 +1,15 @@
+<p class="text-center">Поиск по:</p>	
 <form action="" method="post">
-    {{ form.csrf_token() }}
-    {% for field in form if field.name != "csrf_token" %}
-	{{ field.label() }}
-	{{ field }}
-	<br>
-	{% endfor %}
-	<button type="submit">поиск</button>
-</form>
+	<div class="form-group">
+	  {{ form.csrf }}
+	  <label for="operator"></label>
+	  <input type="text" id="operator" name="operator" placeholder="оператор"  class="form-control">
+	  <label for="callerid"></label>
+	  <input type="text" id="callerid" name="callerid" placeholder="номер"  class="form-control">
+	  <label for="start_date"></label>
+	  <input type="text" id="start_date" name="start_date" placeholder="начало даты"  class="form-control">
+	  <label for="end_date"></label>
+	  <input type="text" id="end_date" name="end_date" placeholder="конец даты"  class="form-control">
+	</div>
+	<button type="submit" class="btn btn-primary">поиск</button>
+  </form>

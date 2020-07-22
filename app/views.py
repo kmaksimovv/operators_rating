@@ -16,7 +16,8 @@ from sqlalchemy import cast, DATE
 def search_results(search):
     ratings = []
     form = SearchForm(request.form)
-    operator = request.form.get('operator').strip()
+    
+    operator = str(request.form.get('operator')).strip()
     callerid = request.form.get('callerid').strip()
     start_date = request.form.get('start_date').strip()
     end_date = request.form.get('end_date').strip()

@@ -2,30 +2,38 @@
 
 {% block content %}
 
-{% include 'form.html' %}
-
-	<table class="table table-striped">
+<div class="row">
+	<div class=col-8>
+		<div class="text-center">
+			<h5>Список оценок</h5>
+		</div>
+	<table class="table table-bordered text-center mt-3">
 		<thead>
 			<tr>
-				<th scope="col">id</th>
-				<th scope="col">operator</th>
-				<th scope="col">queue</th>
-				<th scope="col">callerid</th>
-				<th scope="col">value</th>
-				<th scope="col">created_at</th>
-		</tr>
+				<th scope="col">ид</th>
+				<th scope="col">оператор</th>
+				<th scope="col">очередь</th>
+				<th scope="col">аон</th>
+				<th scope="col">оценка</th>
+				<th scope="col">дата</th>
+			</tr>
 		</thead>
 		<tbody>
-				{% for r in ratings %}
-				<tr>
-					<td>{{ r.id }}</td>
-					<td>{{ r.operator }}</td>
-					<td>{{ r.queue }}</td>
-					<td>{{ r.callerid  }}</td>
-					<td>{{ r.value }}</td>
-					<td>{{ r.created_at }}</td>
-				</tr>
-				{% endfor %}
+			{% for r in ratings %}
+			<tr>
+				<td>{{ r.id }}</td>
+				<td>{{ r.operator }}</td>
+				<td>{{ r.queue }}</td>
+				<td>{{ r.callerid  }}</td>
+				<td>{{ r.value }}</td>
+				<td>{{ r.created_at }}</td>
+			</tr>
+			{% endfor %}
 		</tbody>
 	</table>
+	</div>
+	<div class="col-4">{% include 'form.html' %}</div>
+</div>
+
 {% endblock content %}
+		
