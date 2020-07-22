@@ -11,7 +11,7 @@ class Rating(db.Model):
     created_at = db.Column(db.DateTime(timezone=True), index=True, default=datetime.now)
     
     def __repr__(self):
-        return '<Rating operator:{} and value: {}>'.format(self.operator, self.value)
+        return '<Rating operator:{}>'.format(self.operator)
     
     def format_created_at(self):
         return self.created_at.strftime("%Y-%m-%d %H:%M:%S")

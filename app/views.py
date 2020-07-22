@@ -5,11 +5,12 @@ from flask import render_template, url_for
 from .models import Rating
 from .forms import *
 from sqlalchemy import func
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from flask import request, redirect
 from flask import send_file
 from xlsxwriter.workbook import Workbook
 from flask import after_this_request
+from sqlalchemy import cast, DATE
 
 @app.route('/results')
 def search_results(search):
@@ -58,21 +59,9 @@ def index():
     ratings = db.session.query(Rating).order_by(db.desc(Rating.id)).all()
     return render_template('index.html', ratings=ratings, form=form)
 
-@app.route('/graph')
-def graph_all():
-    ratings = db.session.query(Rating).order_by(db.desc(Rating.id)).limit(15).all()
-    ratings.reverse()
-    labels = []
-    values = []
-    
-    for r in ratings:
-        labels.append(r.format_created_at())
-        values.append(r.value)
-    return render_template('graph.html', labels=labels, values=values)
-
 @app.route('/graph-today')
-def graph_today():
-    ratings = db.session.query(Rating).order_by(db.desc(Rating.created_at)).limit(15).all()
+def graph_today(count=15):
+    ratings = db.session.query(Rating).filter(cast(Rating.created_at, DATE) == date.today()).order_by(db.desc(Rating.id)).limit(count).all()
     ratings.reverse()
     labels = []
     values = []
@@ -83,8 +72,9 @@ def graph_today():
     return render_template('graph.html', labels=labels, values=values)
 
 @app.route('/graph-yesterday')
-def graph_yesterday():
-    ratings = db.session.query(Rating).order_by(db.desc(Rating.created_at)).limit(15).all()
+def graph_yesterday(count=15):
+    yesterday = date.today() - timedelta(days=1)
+    ratings = db.session.query(Rating).filter(Rating.created_at.like("%{}%".format(yesterday))).all()
     ratings.reverse()
     labels = []
     values = []
@@ -112,7 +102,7 @@ def rating_by_operator():
     for r in rating_by_operators:
         r.labels.reverse()
         r.values.reverse()
-      
+
     return render_template('rating_by_operator.html', ratings=rating_by_operators)
 
 @app.route('/get_xslx_for_data')
