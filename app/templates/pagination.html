@@ -1,0 +1,21 @@
+<div class="row">
+	<div class="col-4 offset-4">
+		<ul class="pagination">
+			{% if ratings.has_prev %}
+				<li class="page-item"><a class="page-link" href="{{ ratings.prev_num }}">Предыдущая</a></li>
+			{% endif %}
+			{% for page in ratings.iter_pages() %}
+				{% if page %}
+					{% if page == ratings.page %}
+						<li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ page }}</a></li>
+					{% elif page > ratings.page - 3 and page < ratings.page + 3 %}
+						<li class="page-item"><a class="page-link" href="{{ url_for('index', page = page) }}">{{ page }}</a></li>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+			{% if ratings.has_next %}
+				<li class="page-item"><a class="page-link" href="{{ ratings.next_num }}">Следующая</a></li>
+			{% endif %}
+		<ul>
+	</div>
+</div>

@@ -17,7 +17,7 @@ def search_results(search):
     ratings = []
     form = SearchForm(request.form)
     
-    operator = str(request.form.get('operator')).strip()
+    operator = request.form.get('operator').strip()
     callerid = request.form.get('callerid').strip()
     start_date = request.form.get('start_date').strip()
     end_date = request.form.get('end_date').strip()
@@ -39,9 +39,9 @@ def search_results(search):
         
         return render_template('index.html', ratings=query_sets, form=form)
     elif operator:
-        query_sets = db.session.query(Rating).filter_by(operator=operator).all()
+        query_sets = db.session.query(Rating).filter_by(operator=operator).paginate(3, 1, False)
         
-        return render_template('index.html', ratings=query_sets, form=form)
+        return render_template('search_result.html', ratings=query_sets, form=form)
     elif callerid:
         query_sets = db.session.query(Rating).filter_by(callerid=callerid).all()
         
@@ -51,13 +51,18 @@ def search_results(search):
         
 
 @app.route('/', methods=['GET', 'POST'])
-def index():
+@app.route('/index', methods=['GET', 'POST'])
+@app.route('/index/<int:page>', methods=['GET', 'POST'])
+def index(page = 1):
     form = SearchForm(request.form)
     
     if request.method == 'POST':
         return search_results(form)
     
-    ratings = db.session.query(Rating).order_by(db.desc(Rating.id)).all()
+    rating = Rating() 
+    ratings = rating.list_all_pagination(page, app.config['LISTINGS_PER_PAGE'])
+    
+    # ratings = db.session.query(Rating).order_by(db.desc(Rating.id)).all()
     return render_template('index.html', ratings=ratings, form=form)
 
 @app.route('/graph-today')
@@ -76,7 +81,6 @@ def graph_today(count=15):
 def graph_yesterday(count=15):
     yesterday = date.today() - timedelta(days=1)
     ratings = db.session.query(Rating).filter(Rating.created_at.like("%{}%".format(yesterday))).all()
-    ratings.reverse()
     labels = []
     values = []
     
