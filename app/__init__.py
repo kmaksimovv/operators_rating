@@ -5,8 +5,10 @@ from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from flask_sqlalchemy import SQLAlchemy
 import flask_excel as excel
+from flask_bootstrap import Bootstrap
 
 app=Flask(__name__)
+Bootstrap(app)
 app.config.from_object(os.environ.get('FLASK_ENV') or 'config.DevelopementConfig')
 
 manager = Manager(app)

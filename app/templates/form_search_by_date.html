@@ -1,0 +1,15 @@
+{% import "bootstrap/wtf.html" as wtf %}
+
+<form action="{{ url_for('rating_by_operator_date') }}" method="post" class="form">
+	{{ form.csrf_token() }}
+	<div class="row">
+		<div class="form-group col-md-6">
+			{{ wtf.form_field(form.start_date, class='form-control') }}
+		</div>
+
+		<div class="form-group col-md-6">
+			{{ wtf.form_field(form.end_date, class='form-control') }}
+   	</div>
+	</div>
+	<button type="submit" class="btn btn-info btn-sm">показать</button>
+</form>

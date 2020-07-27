@@ -104,11 +104,35 @@ def rating_by_operator():
         r.labels.reverse()
         r.values.reverse()
 
-    return render_template('rating_by_operator.html', ratings=rating_by_operators)
+    form = SearchByDateGraph()
+    return render_template('rating_by_operator.html', ratings=rating_by_operators, form=form)
+
+@app.route("/rating-by-operator-date", methods=['POST'])
+def rating_by_operator_date():
+    start_date = request.form.get('start_date').replace('T',' ')
+    end_date = request.form.get('end_date').replace('T',' ')
+    
+    operators = [r[0] for r in db.session.query(Rating.operator).distinct().all()]
+    rating_by_operators = []
+    
+    for index, operator in enumerate(operators):
+        rat = Rating()
+        rat.id = index
+        rat.operator = operator 
+        rat.labels = [r[0].strftime("%m-%d %H:%M:%S") for r in db.session.query(Rating).order_by(db.desc(Rating.id)).filter_by(operator=operator).filter(Rating.created_at.between(start_date, end_date)).values('created_at')]
+        rat.values = [r[0] for r in db.session.query(Rating).order_by(db.desc(Rating.id)).filter_by(operator=operator).filter(Rating.created_at.between(start_date, end_date)).values('value')]
+        rating_by_operators.append(rat)
+    
+    for r in rating_by_operators:
+        r.labels.reverse()
+        r.values.reverse()
+
+    form = SearchByDateGraph()
+    return render_template('rating_by_operator.html', ratings=rating_by_operators, form=form)
+    
 
 @app.route('/get_xslx_for_data')
 def get_xslx_for_data(ratings):
-
     
     name_file = f"report_{datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}.xlsx"
     workbook = Workbook(name_file)

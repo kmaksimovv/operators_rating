@@ -7,8 +7,9 @@ from time import sleep
 class Faker(Command):
     
     def create_ratings(self):
-        for r in range(3):
+        for r in range(50):
             rating = Rating(operator='10{}'.format(randint(1,5)), queue='400', callerid=''.join(["{}".format(randint(0, 9)) for num in range(0, 11)]), value=randint(1,5))
+            # rating = Rating(operator='101'.format(randint(1,5)), queue='400', callerid=''.join(["{}".format(randint(0, 9)) for num in range(0, 11)]), value=randint(1,5))
             print(rating)
             db.session.add(rating)
             db.session.commit()

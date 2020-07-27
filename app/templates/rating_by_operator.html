@@ -2,35 +2,13 @@
 
 {% block content %}
 
-<div class="container">
-  <div class="row">
-      <div class="col-sm-6">
-          <div class="form-group">
-              <div class="input-group date" id="datetimepicker" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker"/>
-                  <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
-                      <div class="input-group-text"><i class="fa fa-clock-o"></i></div>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <script type="text/javascript">
-          $(function () {
-              $('#datetimepicker3').datetimepicker({
-                  format: 'LT'
-              });
-          });
-      </script>
-  </div>
-</div>
-
-
+{% include "form_search_by_date.html" %}
 
 <div class="row">
 
   {% for ro in ratings %}
-    <div class="col-6">
-      <canvas id="сhart-{{ro.id }}" width="400" height="200"></canvas>
+    <div class="col-12">
+      <canvas id="сhart-{{ro.id }}" width="300" height="100"></canvas>
       <div class="text-center mt-2">
         <a class="btn btn-default" id="save-image-btn-{{ro.id }}" href="#"><i class="fa fa-download" title="Align Right"> скачать</i></a>
       </div>
