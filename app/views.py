@@ -25,27 +25,27 @@ def search_results(search):
     if operator and callerid and start_date and end_date:
         query_sets = db.session.query(Rating).filter(Rating.operator == operator, Rating.callerid == callerid).filter(Rating.created_at.between(start_date, end_date)).all()
 
-        return render_template('index.html', ratings=query_sets, form=form)
+        return render_template('search_result.html', ratings=query_sets, form=form)
     elif operator and callerid:
         query_sets = db.session.query(Rating).filter_by(operator=operator, callerid=callerid).all()
 
-        return render_template('index.html', ratings=query_sets, form=form)
+        return render_template('search_result.html', ratings=query_sets, form=form)
     elif operator and start_date and end_date:
         query_sets = db.session.query(Rating).filter_by(operator=operator).filter(Rating.created_at.between(start_date, end_date)).all()
 
-        return render_template('index.html', ratings=query_sets, form=form)
+        return render_template('search_result.html', ratings=query_sets, form=form)
     elif callerid and start_date and end_date:
         query_sets = db.session.query(Rating).filter_by(callerid=callerid).filter(Rating.created_at.between(start_date, end_date)).all()
         
-        return render_template('index.html', ratings=query_sets, form=form)
+        return render_template('search_result.html', ratings=query_sets, form=form)
     elif operator:
-        query_sets = db.session.query(Rating).filter_by(operator=operator).paginate(3, 1, False)
+        query_sets = db.session.query(Rating).filter_by(operator=operator).all()
         
         return render_template('search_result.html', ratings=query_sets, form=form)
     elif callerid:
         query_sets = db.session.query(Rating).filter_by(callerid=callerid).all()
         
-        return render_template('index.html', ratings=query_sets, form=form)
+        return render_template('search_result.html', ratings=query_sets, form=form)
     else:
         return redirect(url_for('index'))
         
@@ -53,7 +53,7 @@ def search_results(search):
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 @app.route('/index/<int:page>', methods=['GET', 'POST'])
-def index(page = 1):
+def index(page=1):
     form = SearchForm(request.form)
     
     if request.method == 'POST':
@@ -62,7 +62,6 @@ def index(page = 1):
     rating = Rating() 
     ratings = rating.list_all_pagination(page, app.config['LISTINGS_PER_PAGE'])
     
-    # ratings = db.session.query(Rating).order_by(db.desc(Rating.id)).all()
     return render_template('index.html', ratings=ratings, form=form)
 
 @app.route('/graph-today')
