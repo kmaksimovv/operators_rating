@@ -1,5 +1,6 @@
 from app import db
 from datetime import datetime
+from sqlalchemy import desc
 
 class Rating(db.Model):
     __tablename__ = 'ratings'
@@ -16,3 +17,5 @@ class Rating(db.Model):
     def format_created_at(self):
         return self.created_at.strftime("%Y-%m-%d %H:%M:%S")
     
+    def list_all_pagination(self, page, LISTINGS_PER_PAGE):
+        return Rating.query.order_by(desc(Rating.id)).paginate(page, LISTINGS_PER_PAGE, False)
