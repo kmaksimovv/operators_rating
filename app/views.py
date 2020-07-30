@@ -2,7 +2,7 @@ import os
 from app import app
 from app import db
 from flask import render_template, url_for
-from .models import Rating
+from .models import Rating, User
 from .forms import *
 from sqlalchemy import func
 from datetime import date, datetime, timedelta
@@ -11,8 +11,33 @@ from flask import send_file
 from xlsxwriter.workbook import Workbook
 from flask import after_this_request
 from sqlalchemy import cast, DATE
+from flask_login import login_required
+from flask_login import current_user, login_user, logout_user
+
+@app.route('/login/', methods=['post',  'get'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = db.session.query(User).filter(User.login == form.login.data).first()
+	
+        if user and user.check_password(form.password.data):
+            login_user(user)
+            return redirect(url_for('index'))
+        
+        return redirect(url_for('login'))
+    return render_template('login.html', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 @app.route('/results')
+@login_required
 def search_results(search):
     ratings = []
     form = SearchForm(request.form)
@@ -53,6 +78,7 @@ def search_results(search):
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 @app.route('/index/<int:page>', methods=['GET', 'POST'])
+@login_required
 def index(page=1):
     form = SearchForm(request.form)
     
@@ -65,6 +91,7 @@ def index(page=1):
     return render_template('index.html', ratings=ratings, form=form)
 
 @app.route('/graph-today')
+@login_required
 def graph_today(count=15):
     ratings = db.session.query(Rating).filter(cast(Rating.created_at, DATE) == date.today()).order_by(db.desc(Rating.id)).limit(count).all()
     ratings.reverse()
@@ -77,6 +104,7 @@ def graph_today(count=15):
     return render_template('graph.html', labels=labels, values=values)
 
 @app.route('/graph-yesterday')
+@login_required
 def graph_yesterday(count=15):
     yesterday = date.today() - timedelta(days=1)
     ratings = db.session.query(Rating).filter(Rating.created_at.like("%{}%".format(yesterday))).all()
@@ -91,6 +119,7 @@ def graph_yesterday(count=15):
 
 
 @app.route("/rating-by-operator", methods=['GET'])
+@login_required
 def rating_by_operator():
     operators = [r[0] for r in db.session.query(Rating.operator).distinct().all()]
     rating_by_operators = []
@@ -111,6 +140,7 @@ def rating_by_operator():
     return render_template('rating_by_operator.html', ratings=rating_by_operators, form=form)
 
 @app.route("/rating-by-operator-date", methods=['POST'])
+@login_required
 def rating_by_operator_date():
     start_date = request.form.get('start_date').replace('T',' ')
     end_date = request.form.get('end_date').replace('T',' ')
@@ -135,6 +165,7 @@ def rating_by_operator_date():
     
 
 @app.route('/get_xslx_for_data')
+@login_required
 def get_xslx_for_data(ratings):
     
     name_file = f"report_{datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}.xlsx"
@@ -173,6 +204,7 @@ def get_xslx_for_data(ratings):
 
 
 @app.route('/custom_export_report')
+@login_required
 def custom_export_report(form):
     operator = request.form.get('operator').strip()
     callerid = request.form.get('callerid').strip()
@@ -207,6 +239,7 @@ def custom_export_report(form):
         return render_template("report.html", form=form)
     
 @app.route("/custom_export", methods=['GET', 'POST'])
+@login_required
 def custom_export():
     form = SearchForm()
     
