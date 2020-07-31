@@ -16,6 +16,7 @@ manager = Manager(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app,  db)
 manager.add_command('db', MigrateCommand)
+manager.add_command('createuser', MigrateCommand)
 
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
@@ -28,6 +29,16 @@ from app.models import User, Rating
 from app.seeds import Faker
 
 manager.add_command("seed", Faker())
+
+@manager.command
+def createdefaultuser():
+    user = User(login='admin1')
+    user.set_password('adminpass')
+    db.session.add(user)
+    db.session.commit()
+    print("created user login: admin and password: adminpass")
+    
+
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.query(User).get(user_id)
