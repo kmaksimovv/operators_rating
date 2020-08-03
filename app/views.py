@@ -88,8 +88,6 @@ def graph_yesterday(count=15):
         values.append(r.value)
     return render_template('graph.html', labels=labels, values=values)
 
-
-
 @app.route("/rating-by-operator", methods=['GET'])
 def rating_by_operator():
     operators = [r[0] for r in db.session.query(Rating.operator).distinct().all()]
@@ -132,7 +130,6 @@ def rating_by_operator_date():
 
     form = SearchByDateGraph()
     return render_template('rating_by_operator.html', ratings=rating_by_operators, form=form)
-    
 
 @app.route('/get_xslx_for_data')
 def get_xslx_for_data(ratings):

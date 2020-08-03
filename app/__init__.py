@@ -27,4 +27,3 @@ manager.add_command("seed", Faker())
 
 def app_run():
     manager.run()
-    
