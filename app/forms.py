@@ -7,8 +7,8 @@ from wtforms.fields.html5 import DateTimeLocalField
 from wtforms.validators import InputRequired, DataRequired
 
 class SearchForm(FlaskForm):
-    operator = StringField("оператор:")
-    callerid = StringField("номер:")
+    operator = StringField("оператор")
+    callerid = StringField("номер")
     start_date =  DateTimeLocalField('начало даты', format='%Y-%m-%dT%H:%M')
     end_date =  DateTimeLocalField('конец даты', format='%Y-%m-%dT%H:%M')
 

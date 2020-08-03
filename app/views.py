@@ -73,7 +73,6 @@ def search_results(search):
         return render_template('search_result.html', ratings=query_sets, form=form)
     else:
         return redirect(url_for('index'))
-        
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -198,7 +197,6 @@ def get_xslx_for_data(ratings):
         return response
     
     return send_file('../' + name_file, as_attachment=True, cache_timeout=0)
-
 
 @app.route('/custom_export_report')
 @login_required
