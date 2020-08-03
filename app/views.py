@@ -1,7 +1,7 @@
 import os
 from app import app
-from app import db
-from flask import render_template, url_for
+from app import db, babel
+from flask import render_template, url_for, request
 from .models import Rating, User
 from .forms import *
 from sqlalchemy import func
@@ -13,6 +13,11 @@ from flask import after_this_request
 from sqlalchemy import cast, DATE
 from flask_login import login_required
 from flask_login import current_user, login_user, logout_user
+
+@babel.localeselector
+def get_locale():
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
+
 
 @app.route('/login/', methods=['post',  'get'])
 def login():
