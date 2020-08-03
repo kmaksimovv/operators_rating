@@ -100,7 +100,7 @@ def graph_today(count=15):
     for r in ratings:
         labels.append(r.format_created_at())
         values.append(r.value)
-    return render_template('graph.html', labels=labels, values=values)
+    return render_template('graph.html', labels=labels, values=values, title='Графики за сегодня')
 
 @app.route('/graph-yesterday')
 @login_required
@@ -113,7 +113,7 @@ def graph_yesterday(count=15):
     for r in ratings:
         labels.append(r.format_created_at())
         values.append(r.value)
-    return render_template('graph.html', labels=labels, values=values)
+    return render_template('graph.html', labels=labels, values=values, title='Графики за вчера')
 
 @app.route("/rating-by-operator", methods=['GET'])
 @login_required
