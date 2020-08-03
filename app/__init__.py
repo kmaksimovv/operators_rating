@@ -31,12 +31,12 @@ from app.seeds import Faker
 manager.add_command("seed", Faker())
 
 @manager.command
-def createdefaultuser():
-    user = User(login='admin1')
-    user.set_password('adminpass')
+def createuser(login, password):
+    user = User(login=login)
+    user.set_password(password)
     db.session.add(user)
     db.session.commit()
-    print("created user login: admin and password: adminpass")
+    print(f"created user login: {login} and password: {password}")    
     
 
 @login_manager.user_loader
