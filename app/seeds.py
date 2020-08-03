@@ -18,9 +18,3 @@ class Faker(Command):
     def run(self):
         self.create_ratings()
         print("create faker data rarings")
-        
-    # operator = db.Column(db.String(20), index=True)
-    # queue = db.Column(db.String(20), index=True)
-    # callerid = db.Column(db.String(20), index=True)
-    # value = db.Column(db.Integer, default=0)
-    # created_at = db.Column(db.DateTime(), default=datetime.utcnow)    

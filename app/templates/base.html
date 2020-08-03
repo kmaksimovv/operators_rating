@@ -18,8 +18,9 @@
 
   </head>
   <body>
-
-    {% include "navbar.html" %}
+    {% if current_user.is_authenticated %}
+      {% include "navbar.html" %}
+    {% endif %}
 
     <div class="container content">
       {% block content %} {% endblock content %}

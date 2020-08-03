@@ -21,6 +21,14 @@
 				</div>
 			</li>
 		</ul>
+		<ul class="nav justify-content-end">
+			<li class="nav-item">
+				<a class="nav-link active" href="{{ url_for('logout') }}">Выйти</a>
+			</li>
+			<span class="navbar-text">
+				Привет, {{ current_user.login }}
+			</span>
+		</ul>
 	</div>
 </nav>
 
