@@ -2,8 +2,9 @@
 
 {% block content %}
 
+
 <div class="row">
-	<div class=col-8>
+	<div class=col-9>
 			<div class="text-center">
 					<h5>Список оценок</h5>
 			</div>
@@ -32,8 +33,11 @@
 			</tbody>
 	</table>
 	</div>
-	<div class="col-4">{% include 'form_search.html' %}</div>
+	
+	<div class="col-3 text-center">
+		<h6>Введите параметры для поиска:</h6>
+		{% include '_form_search.html' %}
+	</div>
 </div>
 
 {% endblock content %}
-				

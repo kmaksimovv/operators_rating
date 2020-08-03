@@ -7,10 +7,10 @@ from wtforms.fields.html5 import DateTimeLocalField
 from wtforms.validators import InputRequired, DataRequired
 
 class SearchForm(FlaskForm):
-    operator = StringField("Оператор:")
-    callerid = StringField("По номеру:")
-    start_date = DateField('Начало Даты')
-    end_date = DateField('Конец Даты')
+    operator = StringField("оператор:")
+    callerid = StringField("номер:")
+    start_date =  DateTimeLocalField('начало даты', format='%Y-%m-%dT%H:%M')
+    end_date =  DateTimeLocalField('конец даты', format='%Y-%m-%dT%H:%M')
 
 class SearchByDateGraph(FlaskForm):
     start_date =  DateTimeLocalField('Начало даты', default=datetime.today, format='%Y-%m-%dT%H:%M', validators=[InputRequired()])

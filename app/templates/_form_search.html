@@ -1,0 +1,21 @@
+{% import "bootstrap/wtf.html" as wtf %}
+
+<form action="" method="post" class="form">
+	{{ form.csrf_token() }}
+		<div class="form-group">
+			{{ wtf.form_field(form.operator, class='form-control') }}
+		</div>
+
+		<div class="form-group">
+			{{ wtf.form_field(form.callerid, class='form-control') }}
+		</div>
+
+		<div class="form-group">
+			{{ wtf.form_field(form.start_date, class='form-control') }}
+		</div>
+
+		<div class="form-group">
+			{{ wtf.form_field(form.end_date, class='form-control') }}
+   		</div>
+	<button type="submit" class="btn btn-info btn-sm">искать</button>
+</form>
